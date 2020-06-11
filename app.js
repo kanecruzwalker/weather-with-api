@@ -6,8 +6,12 @@ const app = express();
 const https = require("https");
 
 app.get("/", function (req, res){
+
+    const key = "daf08b427b26f11b51a8b3849391acfc";
+    const query = "London"
+    const units = "imperial";
     
-    const queryUrl = "https://api.openweathermap.org/data/2.5/weather?q=London&appid=daf08b427b26f11b51a8b3849391acfc&units=imperial";
+    const queryUrl = "https://api.openweathermap.org/data/2.5/weather?q="+ query +"&appid="+ key +"&units="+ units;
     https.get(queryUrl, function (response){
         console.log(response.data);
 
@@ -17,11 +21,13 @@ app.get("/", function (req, res){
 
             const description = weatherData.weather[0].description;
 
- 
+            const icon = weatherData.weather[0].icon;
+            const imageUrl = "http://openweathermap.org/img/wn/"+ icon +"@2x.png"
 
             // now time to respond from our server
             res.write("<h1>The temperature is " + temp + "</h1>");
             res.write("<h2>The current description is: " + description+"</h2>");
+            res.write("<image src="+ imageUrl + "></image>");
             res.send();
         });
     });
